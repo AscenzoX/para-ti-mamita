@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Para Mamá Nelfa - Un homenaje mágico</title>
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Roboto&display=swap" rel="stylesheet" />
+<style>
+  /* Reset y estilos base */
+  * {
+    margin: 0; padding: 0; box-sizing: border-box;
+  }
+  body {
+    font-family: 'Roboto', sans-serif;
+    height: 100vh;
+    background: linear-gradient(135deg, #ffe6e6 0%, #fff8f0 100%);
+    overflow-x: hidden;
+    color: #5a3e36;
+    position: relative;
+    user-select: none;
+  }
+  header {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    position: relative;
+    z-index: 10;
+  }
+  h1 {
+    font-family: 'Great Vibes', cursive;
+    font-size: 4rem;
+    color: #b35050;
+    text-shadow: 0 0 12px #f2b6b6;
+  }
+  p.subtitle {
+    margin-top: 0.6rem;
+    max-width: 600px;
+    font-size: 1.4rem;
+    color: #7a4a4a;
+    padding: 0 20px;
+    text-shadow: 0 0 8px #f3c1c1;
+  }
+  .flower {
+    width: 160px;
+    height: 160px;
+    background: url('https://cdn-icons-png.flaticon.com/512/616/616408.png') center/contain no-repeat;
+    margin: 30px auto 20px;
+    animation: bloom 4s ease forwards;
+    transform-origin: center;
+    filter: drop-shadow(0 0 5px #f79999);
+  }
+  @keyframes bloom {
+    0% { transform: scale(0) rotate(-20deg); opacity: 0; }
+    100% { transform: scale(1) rotate(0deg); opacity: 1; }
+  }
+  .btn-envelope {
+    background: url('https://cdn-icons-png.flaticon.com/512/561/561127.png') center/contain no-repeat;
+    width: 110px;
+    height: 110px;
+    border: none;
+    cursor: pointer;
+    background-size: contain;
+    margin-top: 10px;
+    filter: drop-shadow(0 0 5px #b15454);
+    transition: transform 0.3s ease;
+  }
+  .btn-envelope:hover {
+    transform: scale(1.1);
+  }
+
+  /* Carta */
+  .card {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    width: 600px;
+    max-width: 90vw;
+    background: #fff8f0;
+    border-radius: 20px;
+    box-shadow: 0 0 30px rgba(179, 80, 80, 0.6);
+    transform: translate(-50%, -50%) scale(0.8);
+    opacity: 0;
+    padding: 40px 50px 70px 50px;
+    z-index: 1000;
+    color: #6a3c3c;
+    font-size: 1.3rem;
+    line-height: 1.7;
+    font-family: 'Great Vibes', cursive;
+    text-align: center;
+    user-select: text;
+    transition: opacity 0.5s ease, transform 0.5s ease;
+    box-shadow: 0 0 25px 5px rgba(255, 182, 182, 0.9);
+  }
+  .card.show {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+
+  /* Botón cerrar */
+  .btn-close {
+    position: absolute;
+    top: 18px;
+    right: 25px;
+    background: #b35050;
+    border: none;
+    color: white;
+    font-size: 1.6rem;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+    filter: drop-shadow(0 0 5px #8c2f2f);
+    transition: background-color 0.3s ease;
+  }
+  .btn-close:hover {
+    background-color: #e35a5a;
+  }
+
+  /* Overlay para fondo oscuro */
+  .overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.3);
+    display: none;
+    z-index: 999;
+  }
+  .overlay.show {
+    display: block;
+  }
+
+  /* Animación letra por letra */
+  .text-animate span {
+    opacity: 0;
+    display: inline-block;
+    animation: fadeInLetter 0.8s forwards;
+  }
+  @keyframes fadeInLetter {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Corazones fuego a lados */
+  .heart {
+    position: fixed;
+    width: 22px;
+    height: 22px;
+    background: url('https://cdn-icons-png.flaticon.com/512/833/833472.png') center/contain no-repeat;
+    background-size: contain;
+    pointer-events: none;
+    animation: heartRise 3s forwards;
+    filter: drop-shadow(0 0 3px #f87171);
+    opacity: 0.8;
+  }
+  @keyframes heartRise {
+    0% {
+      opacity: 1;
+      transform: translateY(0) scale(1) rotate(0deg);
+    }
+    100% {
+      opacity: 0;
+      transform: translateY(-160px) scale(1.5) rotate(360deg);
+    }
+  }
+
+  /* Estrella fugaz */
+  .shooting-star {
+    position: fixed;
+    top: 20%;
+    left: -100px;
+    width: 80px;
+    height: 4px;
+    background: linear-gradient(90deg, #fff8d8, #f9a0a0);
+    border-radius: 2px;
+    box-shadow: 0 0 10px 2px #f9a0a0;
+    filter: drop-shadow(0 0 8px #f9a0a0);
+    opacity: 0;
+    transform: rotate(-45deg);
+    z-index: 1500;
+    animation: shooting 1.2s ease forwards;
+  }
+  @keyframes shooting {
+    0% {
+      opacity: 1;
+      transform: translateX(0) translateY(0) rotate(-45deg);
+    }
+    100% {
+      opacity: 0;
+      transform: translateX(110vw) translateY(100vh) rotate(-45deg);
+    }
+  }
+
+  /* Fondo dinámico de luces (bokeh) */
+  .bokeh {
+    pointer-events: none;
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    top: 0; left: 0;
+    overflow: hidden;
+    z-index: 5;
+  }
+  .bokeh-circle {
+    position: absolute;
+    background: radial-gradient(circle, rgba(255,182,182,0.4) 0%, transparent 70%);
+    border-radius: 50%;
+    opacity: 0.7;
+    animation-timing-function: ease-in-out;
+  }
+</style>
+</head>
+<body>
+
+<div class="bokeh"></div>
+
+<header>
+  <div class="flower"></div>
+  <h1>Para ti, Mamá Nelfa</h1>
+  <p class="subtitle">Una mujer guerrera, valiente, inquebrantable. Gracias por ser mi fuerza y mi ejemplo. Esto es para ti, con todo mi amor. —Mateo</p>
+  <button class="btn-envelope" aria-label="Abrir carta" title="Haz clic para abrir la carta" onclick="openCard(event)"></button>
+</header>
+
+<div class="overlay" id="overlay"></div>
+
+<div class="card" id="messageCard" aria-live="polite" role="region">
+  <button class="btn-close" aria-label="Cerrar carta" onclick="closeCard()">&times;</button>
+  <p id="messageText"></p>
+</div>
+
+<audio id="bgMusic" loop>
+  <source src="https://cdn.pixabay.com/download/audio/2023/03/06/audio_f7a8dd45fd.mp3?filename=moments-like-this-14467.mp3" type="audio/mp3">
+  Tu navegador no soporta audio.
+</audio>
+<button id="musicToggle" title="Pausar música" aria-pressed="true" style="position: fixed; bottom: 15px; right: 15px; background:#b35050; border:none; border-radius: 50%; width:50px; height:50px; color:white; font-size:24px; cursor:pointer; z-index:1100; filter: drop-shadow(0 0 6px #b15454);">🔊</button>
+
+<script>
+  // Mensaje a mostrar letra por letra
+  const message = `🌸 A veces no sé cómo decirte todo lo que significas para mí, pero hoy quiero que lo sientas en cada palabra...
+  
+Eres mi héroe, mi paz, mi amor más sincero. Todo lo que soy te lo debo a ti.
+
+Gracias por luchar por mí, por darlo todo sin pedir nada. Te amo con el alma, mamá.
+
+—Tu hijo que siempre estará agradecido, Mateo.`;
+
+  const messageText = document.getElementById('messageText');
+  const messageCard = document.getElementById('messageCard');
+  const overlay = document.getElementById('overlay');
+  const bgMusic = document.getElementById('bgMusic');
+  const musicToggle = document.getElementById('musicToggle');
+  const flower = document.querySelector('.flower');
+
+  let letterIndex = 0;
+  let intervalId;
+
+  // Función para escribir letra por letra
+  function typeMessage() {
+    if (letterIndex < message.length) {
+      const span = document.createElement('span');
+      span.textContent = message[letterIndex];
+      span.style.animationDelay = `${letterIndex * 0.04}s`;
+      span.classList.add('text-animate');
+      messageText.appendChild(span);
+      letterIndex++;
+    } else {
+      clearInterval(intervalId);
+      startHeartsFire();
+      showShootingStar();
+    }
+  }
+
+  // Abrir carta
+  function openCard(event) {
+    event.currentTarget.disabled = true;
+    flower.style.filter = 'drop-shadow(0 0 20px #f9a0a0)';
+    messageText.innerHTML = '';
+    letterIndex = 0;
+    messageCard.classList.add('show');
+    overlay.classList.add('show');
+    bgMusic.play();
+    intervalId = setInterval(typeMessage, 50);
+  }
+
+  // Cerrar carta
+  function closeCard() {
+    messageCard.classList.remove('show');
+    overlay.classList.remove('show');
+    stopHeartsFire();
+    bgMusic.pause();
+    document.querySelector('.btn-envelope').disabled = false;
+  }
+
+  // Toggle música
+  musicToggle.addEventListener('click', () => {
+    if (bgMusic.paused) {
+      bgMusic.play();
+      musicToggle.textContent = '🔊';
+      musicToggle.setAttribute('aria-pressed', 'true');
+    } else {
+      bgMusic.pause();
+      musicToggle.textContent = '🔈';
+      musicToggle.setAttribute('aria-pressed', 'false');
+    }
+  });
+
+  // Corazones fuego
+  let heartsInterval;
+  function createHeart(side) {
+    const heart = document.createElement('div');
+    heart.classList.add('heart');
+    const cardRect = messageCard.getBoundingClientRect();
+    // Posición inicial en el lateral de la carta
+    let leftPos = side === 'left' 
+      ? cardRect.left - 30 + (Math.random() * 10)
+      : cardRect.right + 10 + (Math.random() * 10);
+    let topPos = cardRect.top + (Math.random() * cardRect.height * 0.7) + 10;
+    heart.style.left = `${leftPos}px`;
+    heart.style.top = `${topPos}px`;
+    heart.style.opacity = 1;
+    heart.style.animationDuration = `${2 + Math.random() * 1}s`;
+    document.body.appendChild(heart);
+
+    // Animación subir + rotar + desvanecer
+    const animationDuration = 3000 + Math.random() * 1000;
+    let start = null;
+
+    function animate(time) {
+      if (!start) start = time;
+      let elapsed = time - start;
+      if (elapsed < animationDuration) {
+        let progress = elapsed / animationDuration;
+        heart.style.transform = `translateY(${-160 * progress}px) scale(${1 + progress * 0.5}) rotate(${360 * progress}deg)`;
+        heart.style.opacity = 1 - progress;
+        requestAnimationFrame(animate);
+      } else {
+        heart.remove();
+      }
+    }
+    requestAnimationFrame(animate);
+  }
+
+  function startHeartsFire() {
+    let side = 'left';
+    heartsInterval = setInterval(() => {
+      createHeart(side);
+      side = side === 'left' ? 'right' : 'left';
+    }, 250);
+  }
+
+  function stopHeartsFire() {
+    clearInterval(heartsInterval);
+    // Limpiar corazones restantes
+    document.querySelectorAll('.heart').forEach(h => h.remove());
+  }
+
+  // Estrella fugaz
+  function showShootingStar() {
+    const star = document.createElement('div');
+    star.classList.add('shooting-star');
+    document.body.appendChild(star);
+    star.addEventListener('animationend', () => star.remove());
+  }
+
+  // Fondo bokeh dinámico
+  const bokehContainer = document.querySelector('.bokeh');
+  function createBokehCircle() {
+    const circle = document.createElement('div');
+    circle.classList.add('bokeh-circle');
+    const size = Math.random() * 200 + 100;
+    circle.style.width = `${size}px`;
+    circle.style.height = `${size}px`;
+    circle.style.left = `${Math.random() * window.innerWidth}px`;
+    circle.style.top = `${Math.random() * window.innerHeight}px`;
+    circle.style.animationDuration = `${10 + Math.random() * 20}s`;
+    circle.style.animationName = 'bokehPulse';
+    bokehContainer.appendChild(circle);
+    setTimeout(() => circle.remove(), 30000);
+  }
+  setInterval(createBokehCircle, 1500);
+
+</script>
+
+<style>
+  @keyframes bokehPulse {
+    0%, 100% { opacity: 0.7; transform: scale(1); }
+    50% { opacity: 0.3; transform: scale(1.15);}
+  }
+</style>
+
+</body>
+</html>
