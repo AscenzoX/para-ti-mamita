@@ -46,11 +46,11 @@
   .flower {
     width: 160px;
     height: 160px;
-    background: url('https://cdn-icons-png.flaticon.com/512/616/616408.png') center/contain no-repeat;
+    background: url('https://cdn-icons-png.flaticon.com/512/833/833472.png') center/contain no-repeat;
     margin: 30px auto 20px;
     animation: bloom 4s ease forwards;
     transform-origin: center;
-    filter: drop-shadow(0 0 5px #f79999);
+    filter: drop-shadow(0 0 7px #f87171);
   }
   @keyframes bloom {
     0% { transform: scale(0) rotate(-20deg); opacity: 0; }
@@ -262,39 +262,37 @@ Gracias por luchar por mí, por darlo todo sin pedir nada. Te amo con el alma, m
     if (letterIndex < message.length) {
       const span = document.createElement('span');
       span.textContent = message[letterIndex];
-      span.style.animationDelay = `${letterIndex * 0.04}s`;
+      span.style.animationDelay = `${letterIndex * 0.03}s`;
       span.classList.add('text-animate');
       messageText.appendChild(span);
       letterIndex++;
-    } else {
-      clearInterval(intervalId);
-      startHeartsFire();
-      showShootingStar();
+      setTimeout(typeMessage, 25);
     }
   }
 
-  // Abrir carta
   function openCard(event) {
-    event.currentTarget.disabled = true;
-    flower.style.filter = 'drop-shadow(0 0 20px #f9a0a0)';
-    messageText.innerHTML = '';
+    event.preventDefault();
+    if (messageCard.classList.contains('show')) return;
     letterIndex = 0;
+    messageText.textContent = '';
     messageCard.classList.add('show');
     overlay.classList.add('show');
-    bgMusic.play();
-    intervalId = setInterval(typeMessage, 50);
+    typeMessage();
+    if (bgMusic.paused) {
+      bgMusic.play();
+      musicToggle.textContent = '🔊';
+      musicToggle.setAttribute('aria-pressed', 'true');
+    }
   }
-
-  // Cerrar carta
   function closeCard() {
     messageCard.classList.remove('show');
     overlay.classList.remove('show');
-    stopHeartsFire();
-    bgMusic.pause();
-    document.querySelector('.btn-envelope').disabled = false;
+    messageText.textContent = '';
   }
 
-  // Toggle música
+  overlay.addEventListener('click', closeCard);
+
+  // Música toggle
   musicToggle.addEventListener('click', () => {
     if (bgMusic.paused) {
       bgMusic.play();
@@ -302,94 +300,49 @@ Gracias por luchar por mí, por darlo todo sin pedir nada. Te amo con el alma, m
       musicToggle.setAttribute('aria-pressed', 'true');
     } else {
       bgMusic.pause();
-      musicToggle.textContent = '🔈';
+      musicToggle.textContent = '🔇';
       musicToggle.setAttribute('aria-pressed', 'false');
     }
   });
 
-  // Corazones fuego
-  let heartsInterval;
-  function createHeart(side) {
+  // Corazones animados al costado
+  function createHeart() {
     const heart = document.createElement('div');
     heart.classList.add('heart');
-    const cardRect = messageCard.getBoundingClientRect();
-    // Posición inicial en el lateral de la carta
-    let leftPos = side === 'left' 
-      ? cardRect.left - 30 + (Math.random() * 10)
-      : cardRect.right + 10 + (Math.random() * 10);
-    let topPos = cardRect.top + (Math.random() * cardRect.height * 0.7) + 10;
-    heart.style.left = `${leftPos}px`;
-    heart.style.top = `${topPos}px`;
-    heart.style.opacity = 1;
-    heart.style.animationDuration = `${2 + Math.random() * 1}s`;
+    heart.style.left = Math.random() > 0.5 ? '10px' : 'calc(100vw - 32px)';
+    heart.style.top = `${Math.random() * (window.innerHeight - 40) + 40}px`;
     document.body.appendChild(heart);
-
-    // Animación subir + rotar + desvanecer
-    const animationDuration = 3000 + Math.random() * 1000;
-    let start = null;
-
-    function animate(time) {
-      if (!start) start = time;
-      let elapsed = time - start;
-      if (elapsed < animationDuration) {
-        let progress = elapsed / animationDuration;
-        heart.style.transform = `translateY(${-160 * progress}px) scale(${1 + progress * 0.5}) rotate(${360 * progress}deg)`;
-        heart.style.opacity = 1 - progress;
-        requestAnimationFrame(animate);
-      } else {
-        heart.remove();
-      }
-    }
-    requestAnimationFrame(animate);
+    setTimeout(() => heart.remove(), 3000);
   }
+  setInterval(createHeart, 1200);
 
-  function startHeartsFire() {
-    let side = 'left';
-    heartsInterval = setInterval(() => {
-      createHeart(side);
-      side = side === 'left' ? 'right' : 'left';
-    }, 250);
-  }
-
-  function stopHeartsFire() {
-    clearInterval(heartsInterval);
-    // Limpiar corazones restantes
-    document.querySelectorAll('.heart').forEach(h => h.remove());
-  }
-
-  // Estrella fugaz
-  function showShootingStar() {
+  // Animación estrella fugaz periódica
+  function shootingStar() {
     const star = document.createElement('div');
     star.classList.add('shooting-star');
+    star.style.top = `${Math.random() * 40 + 10}%`;
+    star.style.left = '-100px';
     document.body.appendChild(star);
-    star.addEventListener('animationend', () => star.remove());
+    setTimeout(() => star.remove(), 1300);
   }
+  setInterval(shootingStar, 7000);
 
   // Fondo bokeh dinámico
   const bokehContainer = document.querySelector('.bokeh');
-  function createBokehCircle() {
-    const circle = document.createElement('div');
-    circle.classList.add('bokeh-circle');
-    const size = Math.random() * 200 + 100;
-    circle.style.width = `${size}px`;
-    circle.style.height = `${size}px`;
-    circle.style.left = `${Math.random() * window.innerWidth}px`;
-    circle.style.top = `${Math.random() * window.innerHeight}px`;
-    circle.style.animationDuration = `${10 + Math.random() * 20}s`;
-    circle.style.animationName = 'bokehPulse';
-    bokehContainer.appendChild(circle);
-    setTimeout(() => circle.remove(), 30000);
+  function createBokeh() {
+    const bokeh = document.createElement('div');
+    bokeh.classList.add('bokeh-circle');
+    const size = Math.random() * 60 + 40;
+    bokeh.style.width = `${size}px`;
+    bokeh.style.height = `${size}px`;
+    bokeh.style.top = `${Math.random() * 100}%`;
+    bokeh.style.left = `${Math.random() * 100}%`;
+    bokeh.style.animationDuration = `${Math.random() * 4 + 4}s`;
+    bokehContainer.appendChild(bokeh);
+    setTimeout(() => bokeh.remove(), 8000);
   }
-  setInterval(createBokehCircle, 1500);
-
+  setInterval(createBokeh, 1500);
 </script>
-
-<style>
-  @keyframes bokehPulse {
-    0%, 100% { opacity: 0.7; transform: scale(1); }
-    50% { opacity: 0.3; transform: scale(1.15);}
-  }
-</style>
 
 </body>
 </html>
